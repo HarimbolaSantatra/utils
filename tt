@@ -1,0 +1,53 @@
+#!/bin/bash
+# Create a new tmux session
+# session name is derived from integers: 1 to $max_index
+
+# Check if terminal is already in a tmux session
+if [ ! -z $TMUX ]; then
+    echo "You're already in a TMUX session!"
+    exit 1
+fi
+
+# List tmux session
+function list_tm_sess() {
+    tmux ls | sed -E 's/:.*//'
+}
+
+function attach_or_create() {
+    # Check if the tmux session exists
+    session_name=$1
+    if list_tm_sess | grep $session_name >/dev/null 2>&1; then
+	tmux attach-session -t $session_name
+    else
+	tmux new -s $session_name
+    fi
+}
+
+if [ $# -ne 0 ]; then
+
+    # connect to or create to this tmux session
+    if [ $# -gt 1 ]; then
+	echo "Ataovy session iray ihany!"
+	exit 1
+    fi
+
+    sess=$1
+    attach_or_create $sess
+
+else
+
+    declare -a range_array
+    max_index=20
+    for ((i=0;i<=max_index;i++)); do
+	range_array[$i]=$i
+    done
+
+
+    for i in ${range_array[@]}; do
+	if ! tmux has-session -t $i >/dev/null 2>&1; then
+	    tmux new -s $i
+	    break
+	fi
+    done
+
+fi
