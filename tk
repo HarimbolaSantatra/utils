@@ -1,0 +1,14 @@
+#!/bin/bash
+# Kill multiple tmux session
+argn=$#
+
+if [ $argn -eq 0 ]; then
+    echo "Usage: $0 TMUX_SESSION ..."
+    exit 1
+else
+    sessions=$@
+    for sess in ${sessions[@]}; do
+	tmux kill-session -t $sess
+    done
+fi
+exit 0
