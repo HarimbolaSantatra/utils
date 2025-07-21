@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BRAVE="/opt/brave.com/brave/brave"
+if ! [ -x $BRAVE ]; then
+    echo "$BRAVE does not exist or is not executable!"
+    exit 1
+fi
+$BRAVE --incognito
