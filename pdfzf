@@ -1,0 +1,19 @@
+#!/bin/bash
+# Use fuzzy finding to open PDF files
+# Require fzf; ripgrep is optional
+set -e
+
+PDF_READER="okular"
+
+if ! $(which fzf >/dev/null 2>&1); then
+    echo "fzf is required!"
+    exit 1
+fi
+
+if ! $(which $PDF_READER >/dev/null 2>&1); then
+    echo "$PDF_READER is required!"
+    echo "You can use another reader by using \$PDF_READER variable"
+    exit 1
+fi
+
+find -type f -name "*.pdf" -print | fzf --height=40% --multi --print0 | xargs -0 $PDF_READER
