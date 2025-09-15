@@ -1,0 +1,33 @@
+#!/bin/bash
+# Grep and open files in neovim
+# Require fzf; ripgrep is optional
+set -e
+
+if ! $(which fzf >/dev/null 2>&1); then
+    echo "fzf is required!"
+    exit 1
+fi
+
+# Use grep if ripgrep is absent
+if $(which rg >/dev/null); then
+    GREP_CMD=rg
+    GREP_OPT="--hidden --smart-case -l"
+else
+    GREP_CMD=grep
+    GREP_OPT="-Rli"
+fi
+
+if [ $# -eq 0 ]; then
+    read -rp "(neovim|$GREP_CMD) > " pattern
+    $GREP_CMD $GREP_OPT "$pattern" . | fzf --height=40% -m | xargs nvim
+elif [ $# -eq 1 ];then
+    if [ $1 = "-d" ] || [ $1 = "--debug"]; then
+	read -rp "(debug mode) > " pattern
+	echo "Command: $GREP_CMD $GREP_OPT $pattern . | fzf --height=40% -m | xargs nvim"
+    else
+	echo "Unkown parameter $1"
+	exit 1
+    fi
+else
+    $GREP_CMD $GREP_OPT "$pattern" $@ | fzf --height=40% -m | xargs nvim
+fi
