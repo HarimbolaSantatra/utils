@@ -1,0 +1,14 @@
+#!/bin/bash
+# Ecnrypt a folder before saving it to a cloud storage
+set -e
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 FOLDER"
+    exit 1
+fi
+
+src_folder=$1
+compressed_file="file.tar.gz"
+tar czf $compressed_file $src_folder
+gpg -c --no-symkey-cache --cipher-algo AES256 $compressed_file
+echo "Done: $compressed_file"
