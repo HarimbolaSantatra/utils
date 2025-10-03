@@ -8,7 +8,7 @@ if [ $# -ne 1 ]; then
 fi
 
 src_folder=$1
-compressed_file="file.tar.gz"
+compressed_file="$1.tar.gz"
 tar czf $compressed_file $src_folder
 gpg -c --no-symkey-cache --cipher-algo AES256 $compressed_file
 echo "Done: $compressed_file"
