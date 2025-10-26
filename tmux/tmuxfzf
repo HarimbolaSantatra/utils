@@ -1,0 +1,23 @@
+#!/bin/bash
+# use fzf and attach to tmux session
+# Require fzf
+
+# Check if terminal is already in a tmux session
+if [ ! -z $TMUX ]; then
+    echo "You're already in a TMUX session!"
+    exit 1
+fi
+
+if ! which fzf >/dev/null 2>&1; then
+    echo "fzf is not installed!"
+    exit 1
+fi
+
+function attach_session() {
+    # Check if the tmux session exists
+    sess=$1
+    tmux attach-session -t $sess
+}
+
+session_name=$(tmux ls | awk -F': ' '{print $1}' | fzf --height=20%)
+attach_session $session_name
