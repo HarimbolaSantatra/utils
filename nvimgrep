@@ -20,14 +20,6 @@ fi
 if [ $# -eq 0 ]; then
     read -rp "(neovim|$GREP_CMD) > " pattern
     $GREP_CMD $GREP_OPT "$pattern" . | fzf --height=40% -m | xargs nvim
-elif [ $# -eq 1 ];then
-    if [ $1 = "-d" ] || [ $1 = "--debug"]; then
-	read -rp "(debug mode) > " pattern
-	echo "Command: $GREP_CMD $GREP_OPT $pattern . | fzf --height=40% -m | xargs nvim"
-    else
-	echo "Unkown parameter $1"
-	exit 1
-    fi
 else
-    $GREP_CMD $GREP_OPT "$pattern" $@ | fzf --height=40% -m | xargs nvim
+    $GREP_CMD $GREP_OPT "$@" . | fzf -0 --height=40% -m | xargs nvim
 fi
