@@ -19,7 +19,7 @@ fi
 
 if [ $# -eq 0 ]; then
     read -rp "(neovim|$GREP_CMD) > " pattern
-    $GREP_CMD $GREP_OPT "$pattern" . | fzf --height=40% -m | xargs nvim
+    $GREP_CMD $GREP_OPT "$pattern" . | fzf --height=40% -m | xargs -r nvim
 else
-    $GREP_CMD $GREP_OPT "$@" . | fzf -0 --height=40% -m | xargs nvim
+    $GREP_CMD $GREP_OPT "$@" . | fzf -0 --height=40% -m | xargs -r nvim
 fi
